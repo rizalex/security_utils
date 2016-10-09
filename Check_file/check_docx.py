@@ -1,8 +1,8 @@
 ﻿import os
-from pyPdf import PdfFileReader
+from docx import Document
 
 
-class PDF(object):
+class DOCX(object):
 	def __init__(self):
 		self.correct_cnt = 0
 		self.fail_cnt = 0
@@ -19,12 +19,12 @@ class PDF(object):
 	def get_fail_cnt(self):
 		return self.fail_cnt
 
-	def check_each_PDF(self, file_path, file_name):
+	def check_each_DOCX(self, file_path, file_name):
 		file_full_path = os.path.join(file_path, file_name)
 		
 		try :
-			d = open(file_full_path, 'rb')
-			pdf = PdfFileReader(d)
+			d = open(file_full_path,'rb')
+			docx = Document(d)
 			#print "[Success] Success to open PDF, Filename=", file_name
 			self.add_correct_cnt()
 			return True
