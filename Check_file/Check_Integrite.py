@@ -21,8 +21,9 @@ def Parse_argument():
 
 def copy_file(file_name, ext):
 	copy2(os.path.join(tools.get_intput_target_list(), file_name),  os.path.join(os.path.join(tools.get_output_base_folder_name(), tools.get_curtime()), os.path.join(ext, file_name)))
-	tools.print_and_logging(str("[copy_pdf] file_name= "+ file_name))
-			
+#	tools.print_and_logging(str("[copy_"+ext+"] file_name= "+ file_name))
+	tools.print_and_logging(str("%s%-6s%s%s%s" % ("[  copy_", ext, "] ", "file_name=", file_name)))
+#	tools.print_and_logging(str("%-10s%s%6d\t%s%6d" %("[docx]","openable_cnt:", docx.get_correct_cnt(), "unopenable_cnt:", docx.get_fail_cnt())))		
 
 def start_pdf(file_name):
 	if pdf.check_each_PDF(tools.get_intput_target_list(), file_name):
@@ -81,6 +82,7 @@ def main():
 		os.mkdir(os.path.join(os.path.join(tools.get_output_base_folder_name(), tools.get_curtime()), 'docx'))
 
 	for root, dirs, files in os.walk(tools.get_intput_target_list()):
+		tools.set_intput_target_list(root)
 		for file_name in files:
 			check_condition(file_name)
 			tools.add_read_file_cnt()
