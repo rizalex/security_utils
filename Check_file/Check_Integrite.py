@@ -27,8 +27,10 @@ def Parse_argument():
 
 
 def copy_file(file_name, ext):
-	copy2(os.path.join(tools.get_intput_target_list(), file_name),  os.path.join(os.path.join(tools.get_output_base_folder_name(), tools.get_curtime()), os.path.join(ext, file_name)))
-	tools.print_and_logging(str("%s%-6s%s%s%s" % ("[  copy_", ext, "] ", "file_name=", file_name)))
+	try:
+		copy2(os.path.join(tools.get_intput_target_list(), file_name),  os.path.join(os.path.join(tools.get_output_base_folder_name(), tools.get_curtime()), os.path.join(ext, file_name)))
+	finally:
+		tools.print_and_logging(str("%s%-6s%s%s%s" % ("[  copy_", ext, "] ", "file_name=", file_name)))
 	
 
 def start_pdf(file_name):

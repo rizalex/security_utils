@@ -1,5 +1,5 @@
 import os
-from zipfile import ZipFile
+from olefile import OleFileIO
 
 
 class DOC(object):
@@ -24,7 +24,7 @@ class DOC(object):
 			
 		with open(file_full_path,'rb') as d:
 			try :
-				doc = ZipFile(file_full_path)
+				doc = OleFileIO(file_full_path)
 				#print "[Success] Success to open PDF, Filename=", file_name
 				self.add_correct_cnt()
 				return True
