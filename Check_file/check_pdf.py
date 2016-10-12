@@ -21,15 +21,18 @@ class PDF(object):
 
 	def check_each_PDF(self, file_path, file_name):
 		file_full_path = os.path.join(file_path, file_name)
-	
-		with open(file_full_path,'rb') as d:
-			try :
-				pdf = PdfFileReader(d)
-				#print "[Success] Success to open PDF, Filename=", file_name
-				self.add_correct_cnt()
-				return True
+		
+		try :
+			d = open(file_full_path, 'rb')
+			pdf = PdfFileReader(d)
+			#print "[Success] Success to open PDF, Filename=", file_name
+			self.add_correct_cnt()
+			return True
 
-			except Exception as e:
-				#print "[Fail] Fail to open PDF, Filename=", file_name, "Error=", e
-				self.add_fail_cnt()
-				pass
+		except Exception as e:
+			#print "[Fail] Fail to open PDF, Filename=", file_name, "Error=", e
+			self.add_fail_cnt()
+			pass
+
+		finally:
+			d.close()

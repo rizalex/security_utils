@@ -1,4 +1,5 @@
 import os
+import hashlib
 
 class Integrite_tools(object):
 	def __init__(self):
@@ -75,3 +76,24 @@ class Integrite_tools(object):
 			return True
 		else:
 			return False
+
+	def get_hash_SHA1(self, file_full_path):
+		SHA1 = hashlib.sha1()
+		try:
+			with open(file_full_path, 'rb') as f:
+#			for chunk in iter(lambda: f.read(8192), ''):
+#				SHA1.update(chunk)
+				result = hashlib.sha1(f.read()).hexdigest()
+		except Exception as e:
+			tools.print_and_logging(str("%file_name= %s, %s" % ("[  SHA256 ERROR  ] ", file_name, e)))
+		return result
+
+
+	def get_hash_SHA256(self, file_full_path):
+		SHA256 = hashlib.sha256()
+		try:
+			with open(file_full_path, 'rb') as f:
+				result = hashlib.sha256(f.read()).hexdigest()
+		except Exception as e:
+			tools.print_and_logging(str("%file_name= %s, %s" % ("[  SHA256 ERROR  ] ", file_name, e)))
+		return result

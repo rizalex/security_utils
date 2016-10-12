@@ -29,8 +29,11 @@ def Parse_argument():
 def copy_file(file_name, ext):
 	try:
 		copy2(os.path.join(tools.get_intput_target_list(), file_name),  os.path.join(os.path.join(tools.get_output_base_folder_name(), tools.get_curtime()), os.path.join(ext, file_name)))
+		
 	finally:
-		tools.print_and_logging(str("%s%-6s%s%s%s" % ("[  copy_", ext, "] ", "file_name=", file_name)))
+		hash_SHA1 = tools.get_hash_SHA1(os.path.join(os.path.join(tools.get_output_base_folder_name(), tools.get_curtime()), os.path.join(ext, file_name)))
+		hash_SHA256 = tools.get_hash_SHA256(os.path.join(os.path.join(tools.get_output_base_folder_name(), tools.get_curtime()), os.path.join(ext, file_name)))
+		tools.print_and_logging(str("%s%-6s%s%s %s, SHA1=[%s], SHA256=[%s]" % ("[  copy_", ext, "] ", "file_name=", file_name, hash_SHA1, hash_SHA256)))
 	
 
 def start_pdf(file_name):
@@ -69,6 +72,7 @@ def start_xls(file_name):
 		tools.add_fail_cnt()
 
 def check_condition(file_name):
+
 	if tools.get_args().all:
 		if file_name.split('.')[-1].lower()=="pdf":
 			start_pdf(file_name)
