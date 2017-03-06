@@ -104,7 +104,7 @@ def get_scan_results(scan_id, target, user_id):
         threatStatus = (elem.find('threat').text)
         if qodElement > 79 and threatStatus != "Error":
             print("scanned_ip: " + scanned_ip + "|" + "elem.find('host'): " + elem.find('host').text)
-            if (str(elem.find('host').text) == scanned_ip or elem.find('host').text.strip('www.') == scanned_host.strip('www.')):
+            if (str(elem.find('host').text) == scanned_ip or elem.find('host').text.strip('www.') == scanned_host.strip('www.')) or True:
                 print("matched")
                 print("scanned_ip: " + scanned_ip + "|" + "elem.find('host'): " + elem.find('host').text)
                 scan = {}
@@ -138,7 +138,7 @@ def get_scan_results(scan_id, target, user_id):
                 if cve=="NOCVE":
                     description = str(name)+"|"+str(summary)+"|"+str(solution)
                 else:
-                    description="|"
+                    description="None|None|None"
                 '''
                 scan['port'] = port
                 scan['cve_id'] = cve
@@ -281,6 +281,4 @@ launch_stack_scanner(target, profile, scan_stack)
 
 if __name__ == '__main__':
     with app.app_context():
-        get_scan_results("7c613d61-9f55-4134-be37-2a4d1324f73a", 'www.moo.com', '4')
-
-
+        get_scan_results("7c613d61-9f55-4134-be37-2a4d1324f73a", 'www.horangi.com', '4')
