@@ -20,8 +20,7 @@ import StringIO
 import json
 import sqlalchemy
 from apps import app
-from apps.users.models import User, Website, ScanResult, Severity
-from config import config
+from apps.database.models import User, Website, ScanResult, Severity
 from pprint import pprint
 
 openvas_address = "139.59.58.50"
@@ -193,8 +192,7 @@ def psql_create(user_id, host, cve_id, port_string, cvss_base, description, fami
     severity = score_severity(score)
     scan_data['severity'] = severity
     ScanResult.create(commit=True, **scan_data)
-    print
-    "created"
+    print "created"
     pprint(scan_data)
 
 
