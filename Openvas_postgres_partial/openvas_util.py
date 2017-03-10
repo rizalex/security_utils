@@ -19,10 +19,10 @@ import StringIO
 
 import json
 import sqlalchemy
-from sqlalchemy.sql.expression import func, and_, or_
+from sqlalchemy.sql.expression import func, and_, or_, desc
 from apps import app
 from apps.extensions.db import db
-from apps.database.models import User, Website, ScanResult, Severity, SecurityBrief
+from apps.database.models import User, Website, ScanResult, Severity, SecurityBrief, Averages
 from pprint import pprint
 
 openvas_address = "139.59.58.50"
@@ -92,15 +92,19 @@ def count_scan_severity(scans, severity):
 
 def calculate_score(user):
     user_websites = Website.query.filter(Website.user_id == user.id).all()
+    if len(user_websites) == 0:
+        print("calculate_score: user has no website")
+        return
     scans = []
     for website in user_websites:
         scans.extend(latest_scan(website))
     print ("scans = ", scans)
     rank_dict = {}
+    total_vulns = len(scans)
     for sev in Severity:
         rank_dict[sev] = count_scan_severity(scans, sev) / float(len(user_websites))
     print("**** rank_dict = ", rank_dict)
-    return rank_dict
+    return rank_dict, total_vulns
 
 
 def write_security_brief(user, summary, scores):
@@ -258,6 +262,33 @@ def psql_create(user_id, hostname, cve_id, port_string, cvss_base, description, 
     print ("created")
     # pprint(scan_data)
 
+def score_total(scores):
+    return sum([scores[sev] * (sev.value + 1) for sev in Severity])
+
+def score2words(client_score, market_half):
+    if client_score - market_half > 5:
+        return "Below Average"
+    if client_score - market_half < 5:
+        return "Above Average"
+    return "Average"
+
+def make_summary(client_scores, total_vulns):
+    latest_market_ave = Averages.query.order_by(
+                            desc(Averages.date_created)).limit(1).one()
+    market_scan_dict = {
+        Severity.critical : latest_market_ave.critical,
+        Severity.high : latest_market_ave.high,
+        Severity.medium : latest_market_ave.medium,
+        Severity.low : latest_market_ave.low,
+        Severity.informational : latest_market_ave.info,
+    }
+    market_total = score_total(market_scan_dict)
+    client_total = score_total(client_scores)
+
+    print("++++ totalll", client_total, " ******* ", (market_total / 2))
+    w = score2words(client_total, market_total / 2)
+    return "{} with {} vulnerabilities.".format(w, total_vulns)
+
 
 def delete_scan_results(scan_id):
     scanner = VulnscanManager(openvas_address, openvas_username, openvas_password, openvas_manager_port,
@@ -293,7 +324,7 @@ def launch_stack_scanner(target, profile, scan_stack):
     user_firstname = target.split('|')[0]
     user = User.query.filter(User.first_name == user_firstname).one()
     scores = calculate_score(user)
-    summary = "hello"
+    summary = make_summary(scores)
     write_security_brief(user, summary, scores)
 
 ## ONLY USE THIS OR FACE EPIC LAGS
@@ -349,6 +380,6 @@ if __name__ == '__main__':
         get_scan_results("7c613d61-9f55-4134-be37-2a4d1324f73a", 'www.pandoros.com', 'pandoros')
         user_firstname = "pandoros"
         user = User.query.filter(User.first_name == user_firstname).one()
-        scores = calculate_score(user)
-        summary = "hello"
+        scores, total_vulns = calculate_score(user)
+        summary = make_summary(scores, total_vulns)
         write_security_brief(user, summary, scores)
