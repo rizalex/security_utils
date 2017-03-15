@@ -159,6 +159,7 @@ class OMPv4(OMP):
 		request = """<create_target>
 	            <name>%s</name>
 	            <hosts>%s</hosts>
+				<alive_tests>Consider Alive</alive_tests>
 	            <comment>%s</comment>
     </create_target>""" % (name, m_targets, comment)
 

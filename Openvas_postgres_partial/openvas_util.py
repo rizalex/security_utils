@@ -156,6 +156,7 @@ def get_scan_results(scan_id, target, user_id):
                 else:
                     print("creating")
                     psql_create(user_id, target, cve, port, cvss_base, description, family)
+					delete_scan_results(scan_id)
     '''
     if response:
         print(response)
