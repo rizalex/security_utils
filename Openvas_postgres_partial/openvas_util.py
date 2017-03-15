@@ -114,13 +114,18 @@ def write_security_brief(user, summary, scores):
     bullets.append("Medium Vulnerabilities: " + str(int(scores[Severity.medium])))
     bullets.append("Low Vulnerabilities: " + str(int(scores[Severity.low])))
     bullets.append("Informational Items: " + str(int(scores[Severity.informational])))
+
     brief_data = {
-        'user_id' : user.id,
         'summary' : summary,
         'bullets' : bullets
     }
+    if not user.brief:
+        user.brief = SecurityBrief.create(commit=True, **brief_data)
+    else:
+        user.brief.summary = brief_data['summary']
+        user.brief.bullets = brief_data['bullets']
 
-    SecurityBrief.create(commit=True, **brief_data)
+    user.update()
     print("created security brief for %s" % user.email)
 
 
