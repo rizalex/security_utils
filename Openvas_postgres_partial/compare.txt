@@ -1,0 +1,76 @@
+	<result id="92640aed-c8c5-4758-abed-af9762bacd32">
+		<name>WordPress Multiple Vulnerabilities - July09</name>
+		<owner>
+			<name>admin</name>
+		</owner>
+		<comment />
+		<creation_time>2017-02-24T08:33:14Z</creation_time>
+		<modification_time>2017-02-24T08:33:14Z</modification_time>
+		<user_tags>
+			<count>0</count>
+		</user_tags>
+		<detection>
+			<result id="f3d05f68-51f1-4304-8c6c-7738f37f3abf">
+				<details>
+					<detail>
+						<name>product</name>
+						<value>cpe:/a:wordpress:wordpress:4.7.2</value>
+					</detail>
+					<detail>
+						<name>location</name>
+						<value>/</value>
+					</detail>
+					<detail>
+						<name>source_oid</name>
+						<value>1.3.6.1.4.1.25623.1.0.900182</value>
+					</detail>
+					<detail>
+						<name>source_name</name>
+						<value>WordPress Version Detection</value>
+					</detail>
+				</details>
+			</result>
+		</detection>
+		<host>50.63.42.1</host>
+		<port>80/tcp</port>
+		<nvt oid="1.3.6.1.4.1.25623.1.0.800657">
+			<name>WordPress Multiple Vulnerabilities - July09</name>
+			<family>Web application abuses</family>
+			<cvss_base>5.0</cvss_base>
+			<cve>CVE-2009-2432, CVE-2009-2431, CVE-2009-2336, CVE-2009-2335, CVE-2009-2334</cve>
+			<bid>35581, 35584</bid>
+			<xref>URL:http://www.vupen.com/english/advisories/2009/1833, URL:http://securitytracker.com/alerts/2009/Jul/1022528.html, URL:http://www.securityfocus.com/archive/1/archive/1/504795/100/0/threaded</xref>
+			<tags>cvss_base_vector=AV:N/AC:L/Au:N/C:P/I:N/A:N|qod_type=remote_active|impact=Successful exploitation will allow attackers to view the content of plugins
+  configuration pages, inject malicious scripting code, or gain knowledge of
+  sensitive username information.
+  Impact Level: Application|affected=WordPress version prior to 2.8.1 on all running platform.|insight=- Error in 'wp-settings.php' which may disclose the sensitive information via
+    a direct request.
+  - username of a post's author is placed in an HTML comment, which allows
+    remote attackers to obtain sensitive information by reading the HTML source.
+  - Error occur when user attampt for failed login or password request depending
+    on whether the user account exists, and it can be exploited by enumerate
+    valid usernames.
+  - wp-admin/admin.php does not require administrative authentication
+    to access the configuration of a plugin, which allows attackers to specify a
+    configuration file in the page parameter via collapsing-archives/options.txt,
+    related-ways-to-take-action/options.php, wp-security-scan/securityscan.php,
+    akismet/readme.txt and wp-ids/ids-admin.php.|solution=Update to Version 2.8.1
+  http://wordpress.org/download/|summary=The host is running WordPress and is prone to Multiple Vulnerabilities.</tags>
+			<cert>
+				<cert_ref id="DFN-CERT-2010-0125" type="DFN-CERT" />
+				<cert_ref id="DFN-CERT-2009-1593" type="DFN-CERT" />
+				<cert_ref id="DFN-CERT-2009-1208" type="DFN-CERT" />
+				<cert_ref id="DFN-CERT-2009-1188" type="DFN-CERT" />
+				<cert_ref id="DFN-CERT-2009-1144" type="DFN-CERT" />
+				<cert_ref id="DFN-CERT-2009-1081" type="DFN-CERT" />
+			</cert>
+		</nvt>
+		<scan_nvt_version>$Revision: 4970 $</scan_nvt_version>
+		<threat>Medium</threat>
+		<severity>5.0</severity>
+		<qod>
+			<value>95</value>
+			<type>remote_active</type>
+		</qod>
+		<description />
+	</result>

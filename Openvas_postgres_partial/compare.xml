@@ -1,0 +1,193 @@
+	<result id="92640aed-c8c5-4758-abed-af9762bacd32">
+	<name>WordPress Multiple Vulnerabilities - July09</name>
+	<owner>
+		<name>admin</name>
+	</owner>
+	<comment />
+	<creation_time>2017-02-24T08:33:14Z</creation_time>
+	<modification_time>2017-02-24T08:33:14Z</modification_time>
+	<user_tags>
+		<count>0</count>
+	</user_tags>
+	<detection>
+		<result id="f3d05f68-51f1-4304-8c6c-7738f37f3abf">
+			<details>
+				<detail>
+					<name>product</name>
+					<value>cpe:/a:wordpress:wordpress:4.7.2</value>
+				</detail>
+				<detail>
+					<name>location</name>
+					<value>/</value>
+				</detail>
+				<detail>
+					<name>source_oid</name>
+					<value>1.3.6.1.4.1.25623.1.0.900182</value>
+				</detail>
+				<detail>
+					<name>source_name</name>
+					<value>WordPress Version Detection</value>
+				</detail>
+			</details>
+		</result>
+	</detection>
+	<host>50.63.42.1</host>
+	<port>80/tcp</port>
+	<nvt oid="1.3.6.1.4.1.25623.1.0.800657">
+		<name>WordPress Multiple Vulnerabilities - July09</name>
+		<family>Web application abuses</family>
+		<cvss_base>5.0</cvss_base>
+		<cve>CVE-2009-2432, CVE-2009-2431, CVE-2009-2336, CVE-2009-2335, CVE-2009-2334</cve>
+		<bid>35581, 35584</bid>
+		<xref>URL:http://www.vupen.com/english/advisories/2009/1833, URL:http://securitytracker.com/alerts/2009/Jul/1022528.html, URL:http://www.securityfocus.com/archive/1/archive/1/504795/100/0/threaded</xref>
+		<tags>cvss_base_vector=AV:N/AC:L/Au:N/C:P/I:N/A:N|qod_type=remote_active|impact=Successful exploitation will allow attackers to view the content of plugins
+  configuration pages, inject malicious scripting code, or gain knowledge of
+  sensitive username information.
+  Impact Level: Application|affected=WordPress version prior to 2.8.1 on all running platform.|insight=- Error in 'wp-settings.php' which may disclose the sensitive information via
+    a direct request.
+  - username of a post's author is placed in an HTML comment, which allows
+    remote attackers to obtain sensitive information by reading the HTML source.
+  - Error occur when user attampt for failed login or password request depending
+    on whether the user account exists, and it can be exploited by enumerate
+    valid usernames.
+  - wp-admin/admin.php does not require administrative authentication
+    to access the configuration of a plugin, which allows attackers to specify a
+    configuration file in the page parameter via collapsing-archives/options.txt,
+    related-ways-to-take-action/options.php, wp-security-scan/securityscan.php,
+    akismet/readme.txt and wp-ids/ids-admin.php.|solution=Update to Version 2.8.1
+  http://wordpress.org/download/|summary=The host is running WordPress and is prone to Multiple Vulnerabilities.</tags>
+		<cert>
+			<cert_ref id="DFN-CERT-2010-0125" type="DFN-CERT" />
+			<cert_ref id="DFN-CERT-2009-1593" type="DFN-CERT" />
+			<cert_ref id="DFN-CERT-2009-1208" type="DFN-CERT" />
+			<cert_ref id="DFN-CERT-2009-1188" type="DFN-CERT" />
+			<cert_ref id="DFN-CERT-2009-1144" type="DFN-CERT" />
+			<cert_ref id="DFN-CERT-2009-1081" type="DFN-CERT" />
+		</cert>
+	</nvt>
+	<scan_nvt_version>$Revision: 4970 $</scan_nvt_version>
+	<threat>Medium</threat>
+	<severity>5.0</severity>
+	<qod>
+		<value>95</value>
+		<type>remote_active</type>
+	</qod>
+	<description />
+</result>
+
+
+
+<result id="f4de3632-1201-485a-a2df-93918a25a276">
+	<name>OS Detection Consolidation and Reporting</name>
+	<owner>
+		<name>admin</name>
+	</owner>
+	<comment />
+	<creation_time>2017-02-14T10:06:49Z</creation_time>
+	<modification_time>2017-02-14T10:06:49Z</modification_time>
+	<user_tags>
+		<count>0</count>
+	</user_tags>
+	<host>175.41.7.6</host>
+	<port>general/tcp</port>
+	<nvt oid="1.3.6.1.4.1.25623.1.0.105937">
+		<name>OS Detection Consolidation and Reporting</name>
+		<family>Service detection</family>
+		<cvss_base>0.0</cvss_base>
+		<cve>NOCVE</cve>
+		<bid>NOBID</bid>
+		<xref>NOXREF</xref>
+		<tags>cvss_base_vector=AV:N/AC:L/Au:N/C:N/I:N/A:N|summary=This script consolidates the OS information detected by several NVTs and tries to find the best matching OS.
+
+  Furthermore it reports all previously collected information leading to this best matching OS. It also reports possible additional informations
+  which might help to improve the OS detection.
+
+  If any of this information is wrong or could be improved please consider to report these to openvas-plugins@wald.intevation.org.|qod_type=remote_banner</tags>
+		<cert />
+	</nvt>
+	<scan_nvt_version>$Revision: 5130 $</scan_nvt_version>
+	<threat>Log</threat>
+	<severity>0.0</severity>
+	<qod>
+		<value>80</value>
+		<type>remote_banner</type>
+	</qod>
+	<description>Best matching OS:
+
+OS: Linux Kernel
+CPE: cpe:/o:linux:kernel
+Found by NVT: 1.3.6.1.4.1.25623.1.0.102002 (ICMP based OS Fingerprinting)
+Concluded from ICMP based OS fingerprint: 
+(100% confidence)
+
+Linux Kernel
+Setting key "Host/runs_unixoide" based on this information
+
+Unknown banners have been collected which might help to identify the OS running on this host. If these banners containing information about the host OS please report the following information to openvas-plugins@wald.intevation.org:
+
+Banner: # Nmap 7.01 scan initiated Tue Feb 14 10:02:37 2017 as: nmap -n -Pn -sV -oN /tmp/nmap-175.41.7.6-1946537769 -O --osscan-limit -p 8889,8081,8080,8000,7777,6501,5100,4040,2105,2103,1989,1965,444,443,80,21,22,25,19569,25653,31904 175.41.7.6
+Nmap scan report for 175.41.7.6
+Host is up (0.0078s latency).
+PORT      STATE  SERVICE     VERSION
+21/tcp    closed ftp
+22/tcp    closed ssh
+25/tcp    closed smtp
+80/tcp    open   http        PWS httpd 8.2.0.5
+443/tcp   open   ssl/http    PWS httpd 8.2.0.5
+444/tcp   open   ssl/http    PWS httpd 8.2.0.5
+1965/tcp  open   unknown
+1989/tcp  open   tr-rsrb-p3?
+2103/tcp  open   tcpwrapped
+2105/tcp  open   tcpwrapped
+4040/tcp  open   http        PWS httpd 8.2.0.5
+5100/tcp  open   http        PWS httpd 8.2.0.5
+6501/tcp  open   http        PWS httpd 8.2.0.5
+7777/tcp  open   http        PWS httpd 8.2.0.5
+8000/tcp  open   http        PWS httpd 8.2.0.5
+8080/tcp  open   http        PWS httpd 8.2.0.5
+8081/tcp  open   http        PWS httpd 8.2.0.5
+8889/tcp  open   http        PWS httpd 8.2.0.5
+19569/tcp closed unknown
+25653/tcp closed unknown
+31904/tcp closed unknown
+Aggressive OS guesses: Android 5.0.2 (96%), Linux 3.2 - 4.0 (96%), Linux 3.4 - 3.10 (96%), Linux 3.8 (95%), Linux 2.6.32 - 3.10 (95%), Android 4.2.2 (Linux 3.4) (94%), Linux 2.6.32 (94%), Linux 3.10 (94%), Linux 3.10 - 3.19 (94%), Linux 3.2 - 3.10 (93%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 7 hops
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Tue Feb 14 10:05:16 2017 -- 1 IP address (1 host up) scanned in 160.13 seconds
+Identified from: Nmap TCP/IP fingerprinting
+
+Banner: Server: PWS/8.2.0.5
+Identified from: HTTP Server banner on port 4040/tcp
+
+Banner: Server: PWS/8.2.0.5
+Identified from: HTTP Server banner on port 443/tcp
+
+Banner: Server: PWS/8.2.0.5
+Identified from: HTTP Server banner on port 444/tcp
+
+Banner: Server: PWS/8.2.0.5
+Identified from: HTTP Server banner on port 5100/tcp
+
+Banner: Server: PWS/8.2.0.5
+Identified from: HTTP Server banner on port 6501/tcp
+
+Banner: Server: PWS/8.2.0.5
+Identified from: HTTP Server banner on port 7777/tcp
+
+Banner: Server: PWS/8.2.0.5
+Identified from: HTTP Server banner on port 80/tcp
+
+Banner: Server: PWS/8.2.0.5
+Identified from: HTTP Server banner on port 8000/tcp
+
+Banner: Server: PWS/8.2.0.5
+Identified from: HTTP Server banner on port 8080/tcp
+
+Banner: Server: PWS/8.2.0.5
+Identified from: HTTP Server banner on port 8081/tcp
+
+Banner: Server: PWS/8.2.0.5
+Identified from: HTTP Server banner on port 8889/tcp</description>
+</result>
