@@ -72,8 +72,8 @@ def latest_scan(website):
     res = ScanResult.query.filter(
         and_(
             ScanResult.website_id == website.id,
-            ScanResult.date_created == db.session.query(
-            func.max(ScanResult.date_created)).\
+            ScanResult.scan_id == db.session.query(
+            func.max(ScanResult.scan_id)).\
             filter(ScanResult.website_id == website.id).scalar())
         ).\
     all()
@@ -136,7 +136,7 @@ def get_scan_results(scan_id, target, user_id):
     scanned_ip = data[0]
     scanned_host = target
     print ("scanned_host = ", scanned_host)
-
+    pg_scan_id = int(get_max_scan_id(Website.query.filter(Website.hostname == target).one()) or 0) + 1
     """
     #Activate for actual process
     scanner = VulnscanManager(openvas_address, openvas_username, openvas_password, openvas_manager_port,
@@ -220,7 +220,7 @@ def get_scan_results(scan_id, target, user_id):
                 else:
                     print("creating")
                     print ("target =", target)
-                    psql_create(user_id, target, cve, port, cvss_base, description, family, creation_time)
+                    psql_create(user_id, target, cve, port, cvss_base, description, family, creation_time, pg_scan_id)
                     delete_scan_results(scan_id)
     '''
     if response:
@@ -228,7 +228,10 @@ def get_scan_results(scan_id, target, user_id):
         #   delete_scan_results(scan_id)
     '''
 
-def psql_create(user_id, hostname, cve_id, port_string, cvss_base, description, family, creation_time):
+def get_max_scan_id(host):
+    return db.session.query(func.max(ScanResult.scan_id)).filter(ScanResult.website_id == host.id).scalar()
+
+def psql_create(user_id, hostname, cve_id, port_string, cvss_base, description, family, creation_time, scan_id):
     user, host = None, None
     try:    # scans for market does not have user and website on the other tables
         user = User.query.filter(User.first_name == user_id).one()
@@ -241,7 +244,7 @@ def psql_create(user_id, hostname, cve_id, port_string, cvss_base, description, 
             print("user_id = %s no host or user in other tables" % user_id)
     scan_data = {
         'vuln_id': cve_id,
-        'scan_id': 0,  # we don't need
+        'scan_id': scan_id,
         'manual': False,
         'date_created' : datetime.strptime(creation_time, OPENVAS_TIME_FMT)
     }
@@ -382,8 +385,8 @@ launch_stack_scanner(target, profile, scan_stack)
 
 if __name__ == '__main__':
     with app.app_context():
-        get_scan_results("7c613d61-9f55-4134-be37-2a4d1324f73a", 'www.pandoros.com', 'pandoros')
-        user_firstname = "pandoros"
+        get_scan_results("7c613d61-9f55-4134-be37-2a4d1324f73a", 'www.pandoros.com', 'testj0')
+        user_firstname = "testj0"
         user = User.query.filter(User.first_name == user_firstname).one()
         scores, total_vulns = calculate_score(user)
         summary = make_summary(scores, total_vulns)
