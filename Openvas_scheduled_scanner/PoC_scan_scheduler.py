@@ -380,8 +380,6 @@ def delete_target_results(target_id):
 OPENVAS SCAN METHODS END HERE
 '''
 
-#this = Schedule('client_id', 'www.qwerty123456.com', 'openvas', '2017-02-08 14:49:59', None, None, "Pending", None)
-#this.add_schedule()
-#stack_iterate_and_loop()
-
-get_scan_results('9d00b9b3-7c25-4c8f-9be2-19d3792da8ea','127.0.0.1')
+this = Schedule('client_id', 'www.qwerty123456.com', 'openvas', '2017-02-08 14:49:59', None, None, "Pending", None)
+this.add_schedule()
+stack_iterate_and_loop()
