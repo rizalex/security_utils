@@ -1,4 +1,6 @@
 from __future__ import print_function
+import sys
+sys.path.append("./horangi_web_backend")
 from threading import Semaphore
 import threading
 from functools import partial
@@ -22,7 +24,7 @@ import sqlalchemy
 from sqlalchemy.sql.expression import func, and_, or_, desc
 from apps import app
 from apps.extensions.db import db
-from apps.database.models import User, Website, ScanResult, Severity, SecurityBrief, Averages
+from apps.database import User, Website, ScanResult, Severity, SecurityBrief, Averages
 from pprint import pprint
 
 openvas_address = "139.59.58.50"
@@ -61,12 +63,23 @@ def my_print_status(i):
 
 # Do not call this directly for large scans
 def launch_normal_scanner(target, profile):
+    sem = Semaphore(0)
     scanner = VulnscanManager(openvas_address, openvas_username, openvas_password, openvas_manager_port,
                               openvas_timeout)
     scan_id, target_id = scanner.launch_scan(target=target,  # Target to scan
-                                             profile=profile)
+                                             profile=profile,
+                                             callback_end=partial(lambda x: x.release(), sem),
+                                             callback_progress=my_print_status)
 
-    print("launched: scan id = " + scan_id + "target id= " + target_id)
+    sem.acquire()
+    print("finished: scan id = " + scan_id + "target id= " + target_id)
+    website = Website.query.filter(Website.hostname == target).one()
+    # user_firstname = 'cub'
+    user = User.query.get(website.user_id)
+    get_scan_results(str(scan_id), target, user.first_name)
+    scores, total_vulns = calculate_score(user)
+    summary = make_summary(scores, total_vulns)
+    write_security_brief(user, summary, scores)
 
 def latest_scan(website):
     res = ScanResult.query.filter(
@@ -137,7 +150,7 @@ def get_scan_results(scan_id, target, user_id):
     scanned_host = target
     print ("scanned_host = ", scanned_host)
     pg_scan_id = int(get_max_scan_id(Website.query.filter(Website.hostname == target).one()) or 0) + 1
-    """
+
     #Activate for actual process
     scanner = VulnscanManager(openvas_address, openvas_username, openvas_password, openvas_manager_port,
                               openvas_timeout)
@@ -159,6 +172,7 @@ def get_scan_results(scan_id, target, user_id):
     openvas_results = ElementTree.parse('test.xml')
     print("read from flat file")
     #
+    """
 
     for elem in openvas_results.findall('result'):
 
