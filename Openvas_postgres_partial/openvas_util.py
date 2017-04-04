@@ -117,6 +117,8 @@ def calculate_score(user):
     for sev in Severity:
         rank_dict[sev] = count_scan_severity(scans, sev) / float(len(user_websites))
     print("**** rank_dict = ", rank_dict)
+    if rank_dict.get(Severity.informational):
+        total_vulns -= rank_dict.get(Severity.informational)
     return rank_dict, total_vulns
 
 
@@ -399,8 +401,8 @@ launch_stack_scanner(target, profile, scan_stack)
 
 if __name__ == '__main__':
     with app.app_context():
-        get_scan_results("7c613d61-9f55-4134-be37-2a4d1324f73a", 'www.pandoros.com', 'testj0')
-        user_firstname = "testj0"
+        get_scan_results("7c613d61-9f55-4134-be37-2a4d1324f73a", 'www.pandoros.com', 'pandoros')
+        user_firstname = "pandoros"
         user = User.query.filter(User.first_name == user_firstname).one()
         scores, total_vulns = calculate_score(user)
         summary = make_summary(scores, total_vulns)
