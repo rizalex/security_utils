@@ -10,36 +10,42 @@ target = 'http://demo.testfire.net/'
 # By default ZAP API client will connect to port 8080
 #zap = ZAPv2()
 #Use the line below if ZAP is not listening on port 8080, for example, if listening on port 8090
-zap = ZAPv2(proxies={'http': 'https://127.0.0.1:8080', 'https': 'https://127.0.0.1:8080'})
 
-apikey = 'kq68ak0mo6nsn2mjesl3t3au33' # Change to match the API key set in ZAP, or use None if the API key is disabled
+ZAP_address = '127.0.0.1'
+ZAP_port = '8080'
 
-# do stuff
-print 'Accessing target %s' % target
-# try have a unique enough session...
-zap.urlopen(target)
-# Give the sites tree a chance to get updated
-time.sleep(2)
+zap = ZAPv2(apikey='kq68ak0mo6nsn2mjesl3t3au33',
+    proxies={'http': 'https://' + ZAP_address + ':' + ZAP_port, 'https': 'https://' + ZAP_address + ':' + ZAP_port})
 
-print 'Spidering target %s' % target
-scanid = zap.spider.scan(target, apikey=apikey)
-# Give the Spider a chance to start
-time.sleep(2)
-while (int(zap.spider.status()) < 100):
-    print 'Spider progress %: ' + zap.spider.status()
+
+def start_scan(user_id, target):
+
+    print 'Accessing target %s' % target
+    # try have a unique enough session...
+    zap.urlopen(target)
+    # Give the sites tree a chance to get updated
     time.sleep(2)
 
-print 'Spider completed'
-# Give the passive scanner a chance to finish
-time.sleep(5)
+    print 'Spidering target %s' % target
+    scanid = zap.spider.scan(target)
+    # Give the Spider a chance to start
+    time.sleep(2)
+    while (int(zap.spider.status(scanid)) < 100):
+        print 'Spider progress %: ' + zap.spider.status()
+        time.sleep(2)
 
-print 'Scanning target %s' % target
-scanid = zap.ascan.scan(target, apikey=apikey)
-while (int(zap.ascan.status()) < 100):
-    print 'Scan progress %: ' + zap.ascan.status()
+    print 'Spider completed'
+    # Give the passive scanner a chance to finish
     time.sleep(5)
 
-print 'Scan completed'
+    print 'Scanning target %s' % target
+    scanid = zap.ascan.scan(target)
+    while (int(zap.ascan.status(scanid)) < 100):
+        print 'Scan progress %: ' + zap.ascan.status(scanid)
+        time.sleep(5)
+
+    print 'Scan completed'
+
 
 # Report the results
 f = open('out2.txt', 'w')
