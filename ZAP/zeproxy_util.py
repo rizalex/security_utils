@@ -47,11 +47,13 @@ def start_scan(user_id, target):
     print 'Scan completed'
 
 
-# Report the results
-f = open('out2.txt', 'w')
-f.write('Hosts: ' + ', '.join(zap.core.hosts))
-f.write('Sites: ' + ', '.join(zap.core.sites))
-f.write('Urls: ' + ', '.join(zap.core.urls))
-f.write('Alerts: ')
-pprint(zap.core.alerts(), f)
-f.close()
+    # Report the results
+    f = open('out2.txt', 'w')
+    f.write('Hosts: ' + ', '.join(zap.core.hosts))
+    f.write('Sites: ' + ', '.join(zap.core.sites))
+    f.write('Urls: ' + ', '.join(zap.core.urls))
+    f.write('Alerts: ')
+    pprint(zap.core.alerts(), f)
+    f.close()
+
+start_scan("1", target)
