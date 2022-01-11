@@ -1,0 +1,2 @@
+# Please run this script using powershell and modify the file directory on S3 bucket as well.
+(New-Object System.Net.WebClient).DownloadFile("https://sentinelone-installer.s3.ap-southeast-1.amazonaws.com/Windows/SentinelInstaller-x64_windows_64bit_v21_5_7_370.exe", "$env:TEMP/SentinelInstaller-x64_windows_64bit.exe")

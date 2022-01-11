@@ -1,0 +1,65 @@
+# Check autoupdate enabled 
+[System.Reflection.Assembly]::LoadWithPartialName('Microsoft.Update.AutoUpdate') | Out-Null
+$Session = [activator]::CreateInstance([type]::GetTypeFromProgID("Microsoft.Update.AutoUpdate",$ComputerName))
+$AutoupdateEnabled = $Session.ServiceEnabled
+# Try/catch does not work for nonterminating errors. If something failed, check for empty variable and assign default value.
+if(!$AutoupdateEnabled) {
+  $AutoupdateEnabled = $false
+}
+
+# Check autoplay and autorun disabled
+$AutoplayProperty = Get-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers"
+$AutoplayDisabled = $AutoplayProperty.DisableAutoplay -eq 1
+$AutorunDisabled = [bool]($AutorunProperty.PSobject.Properties.name -match "NoDriveTypeAutoRun")
+
+# Check antivirus enabled
+$MpComp = Get-MpComputerStatus
+$AvEnabled = $MpComp.AntivirusEnabled
+if(!$AvEnabled) {
+  $AvEnabled = $false
+}
+
+# Check firewall running
+$FWService = (Get-Service | ?{$_.Name -eq "mpssvc"});
+$FWEnabled = $FWService.Status -eq "Running"
+
+$FWProfileConfigured = $true
+$AllFirewallProfiles = Get-NetFirewallProfile
+$Obj = $AllFirewallProfiles | ForEach-Object {
+  if(($_.Enabled -eq $false) -Or ($_.AllowInboundRules -eq $true)) {
+    $FWProfileConfigured = $false
+  }
+}
+$Obj
+
+# Check UAC settings
+# https://superuser.com/questions/817114/set-uac-level-with-powershell
+$UACAlwaysNotify = $false
+Function Get-RegistryValue($key, $value) {  
+   (Get-ItemProperty $key $value).$value  
+}
+
+$Key = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" 
+$ConsentPromptBehaviorAdmin_Name = "ConsentPromptBehaviorAdmin" 
+$PromptOnSecureDesktop_Name = "PromptOnSecureDesktop" 
+
+$ConsentPromptBehaviorAdmin_Value = Get-RegistryValue $Key $ConsentPromptBehaviorAdmin_Name 
+$PromptOnSecureDesktop_Value = Get-RegistryValue $Key $PromptOnSecureDesktop_Name
+
+If($ConsentPromptBehaviorAdmin_Value -Eq 2 -And $PromptOnSecureDesktop_Value -Eq 1){ 
+    $UACAlwaysNotify = $true 
+}
+
+# Check that at least disk C: is encrypted
+$EncryptedCDrive = $false
+$BitlockerC = Get-BitLockerVolume -MountPoint "C:"
+If($BitlockerC.VolumeStatus -Eq "FullyEncrypted"){ 
+    $EncryptedCDrive = $true 
+}
+
+# Check screensaver timeout and password
+$ScreenSaverProperty = Get-ItemProperty -Path "HKCU:\Control Panel\Desktop"
+$ScreenSaverIsSecure = $ScreenSaverProperty.ScreenSaverIsSecure -eq 1
+$ScreenSaverTimeoutLess20min = $ScreenSaverProperty.ScreenSaveTimeOut -le 1200
+
+Write-Output "{'AutoupdateEnabled': $AutoupdateEnabled, 'AutoplayDisabled': $AutoplayDisabled, 'AutorunDisabled': $AutorunDisabled, 'AvEnabled': $AvEnabled, 'FWEnabled': $FWEnabled, 'FWProfileConfigured': $FWProfileConfigured, 'UACAlwaysNotify': $UACAlwaysNotify, 'EncryptedCDrive': $EncryptedCDrive, 'ScreenSaverIsSecure': $ScreenSaverIsSecure, 'ScreenSaverTimeOutLess20min': $ScreenSaverTimeOutLess20min}"
